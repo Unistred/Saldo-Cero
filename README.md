@@ -2,14 +2,14 @@
 
 ---
 
---Integrantes del Grupo
+##Integrantes del Grupo
 *   **Francisco Mallo** - *Backend y Persistencia*
 *   **Joaquin Ivan Guzman Dubickas** - *Gráficos y Pantallas*
 *   **Ignacio Palermo** - *Mecánicas e Interacción*
 
 ---
 
---Descripción del Videojuego
+##Descripción del Videojuego
 **"Saldo Cero"** es un *Serious Game* interactivo de un solo jugador en dos dimensiones (2D) con perspectiva Top-Down. El proyecto está enfocado en visibilizar y concientizar sobre la ludopatía en adolescentes, exponiendo de forma cruda cómo esta adicción afecta progresivamente la conducta, el carácter y el entorno socioemocional de las personas. 
 
 Ambientado en un casino y entornos urbanos de clase media-baja, el jugador controla a un joven de 16 años cuyas decisiones e impactos en los juegos de azar afectarán directamente su saldo económico, su estabilidad mental y el trágico destino de su familia.
