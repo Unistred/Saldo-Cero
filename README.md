@@ -28,7 +28,7 @@ Ambientado en un casino y entornos urbanos de clase media-baja, el jugador contr
 --Documentación Completa (Wiki)
 La propuesta formal y detallada del videojuego, que incluye el alcance mínimo, el alcance deseado, el esquema relacional de la base de datos y el desglose de la historia por semanas, se encuentra disponible en la documentación oficial del repositorio:
 
-**[Ver la Propuesta Detallada en la Wiki de GitHub](https://github.com/Unistred/Saldo-Cero/wiki/Propuesta-formal-Saldo-Cero)**
+**[Ver la Propuesta Detallada en la Wiki de GitHub](https://github.com/Unistred/Saldo-Cero/wiki/Propuesta-del-Proyecto-%5BSaldo-Cero%5D)**
 ---
 
 ### Prerrequisitos Técnicos
