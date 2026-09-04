@@ -20,3 +20,11 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 - Creación de la clase Jugador con gestión de saldo y cordura.
 - Implementación de la clase Slots con lógica de tiro, aleatorización de rodillos y evaluación de premios.
 - Organización del proyecto en paquetes (enums, juegos, screens, usuarios).
+
+
+## [0.1.2] - 03-09-2026
+
+### Añadido
+Implementación de StretchViewport y suavizado visual
+- Se añadieron StretchViewport en pantallas principales
+- Se activó filtrado lineal en fuentes/texturas para reducir pixelación
