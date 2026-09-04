@@ -12,7 +12,8 @@ public class Slots {
     private Simbolo rodillo2 = Simbolo.SIETE;
     private Simbolo rodillo3 = Simbolo.SIETE;
     private String mensaje = "Presiona ESPACIO para girar";
-    public Slots(int apuestaInicial) {
+    public Slots(Jugador jugador, int apuestaInicial) {
+        this.jugador = jugador;
         this.apuesta = apuestaInicial;
     }
     public boolean intentarGirar() {
