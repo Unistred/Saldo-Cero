@@ -18,6 +18,7 @@ public class Slots {
     }
     public boolean intentarGirar() {
         if (jugador.descontarSaldo(apuesta) >= 0) {
+            jugador.setSaldo(jugador.getSaldo() - apuesta);
             mensaje = "Girando...";
             return true;
         } else {
@@ -33,17 +34,17 @@ public class Slots {
     public void evaluarResultado() {
         if (rodillo1 == Simbolo.SIETE && rodillo2 == Simbolo.SIETE && rodillo3 == Simbolo.SIETE) {
             int premio = apuesta * Simbolo.SIETE.getMultiplicador();
-            jugador.setSaldo(premio);
+            jugador.setSaldo(jugador.getSaldo() + premio);
             mensaje = "JACKPOT!! Ganaste $" + premio;
         }
         else if (rodillo1 == rodillo2 && rodillo2 == rodillo3) {
             int premio = apuesta * rodillo1.getMultiplicador();
-            jugador.setSaldo(premio);
+            jugador.setSaldo(jugador.getSaldo() + premio);
             mensaje = "3 COINCIDENCIAS! Ganaste $" + premio;
         }
         else if (rodillo1 == rodillo2 || rodillo2 == rodillo3 || rodillo1 == rodillo3) {
             int premio = apuesta * 2;
-            jugador.setSaldo(premio);
+            jugador.setSaldo(jugador.getSaldo() + premio);
             mensaje = "Par de coincidencias! Ganaste $" + premio;
         }
         else {

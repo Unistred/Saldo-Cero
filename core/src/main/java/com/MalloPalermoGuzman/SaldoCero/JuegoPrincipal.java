@@ -2,6 +2,7 @@ package com.MalloPalermoGuzman.SaldoCero;
 
 import com.MalloPalermoGuzman.SaldoCero.screens.MainMenuScreen;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -11,6 +12,12 @@ public class JuegoPrincipal extends Game {
     public static final float VIRTUAL_HEIGHT = 400;
     public SpriteBatch batch;
     public BitmapFont font;
+
+    public static Texture cargarTextura(String ruta) {
+        Texture texture = new Texture(Gdx.files.internal(ruta), true); // 👈 true = genera mipmaps
+        texture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Nearest);
+        return texture;
+    }
 
     @Override
     public void create() {

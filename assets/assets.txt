@@ -1,1 +1,16 @@
 .gitkeep
+texturas/hola
+texturas/juegos/slots/animacionSlot.png
+texturas/juegos/slots/campana.png
+texturas/juegos/slots/cereza.png
+texturas/juegos/slots/diamante.png
+texturas/juegos/slots/moneda.png
+texturas/juegos/slots/siete.png
+texturas/juegos/slots/slot.png
+texturas/menu/exitMenu.png
+texturas/menu/logoMenuSaldoCero.png
+texturas/menu/startMenu.png
+texturas/personajes/guardias/guardia2.png
+texturas/personajes/guardias/guerdia1.png
+texturas/personajes/jugador/jugadorAnimacionAD.png
+texturas/personajes/jugador/jugadorAnimacionWS.png

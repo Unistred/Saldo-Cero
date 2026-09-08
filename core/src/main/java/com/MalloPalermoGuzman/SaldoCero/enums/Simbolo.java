@@ -5,7 +5,7 @@ public enum Simbolo {
     CEREZA("Cereza", 5),
     CAMPANA("Campana", 3),
     DIAMANTE("Diamante", 2),
-    BAR("BAR", 2);
+    MONEDA("MONEDA", 2);
 
     private final String nombre;
     private final int multiplicador;

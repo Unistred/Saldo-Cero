@@ -2,10 +2,10 @@ package com.MalloPalermoGuzman.SaldoCero.usuarios;
 
 public class Jugador {
     private String nombre;
-    private int saldo = 0;
+    private int saldo = 500;
     private int cordura = 100;
 
-    public Jugador(String nombre, int saldo, int cordura) {
+    public Jugador(String nombre) {
         this.nombre = nombre;
     }
 
@@ -19,7 +19,7 @@ public class Jugador {
     public int descontarSaldo(int descontado){
         return saldo - descontado;
     }
-    public void setSaldo(int descontado){
-        this.saldo = saldo - descontado;
+    public void setSaldo(int num){
+        this.saldo = num;
     }
 }
