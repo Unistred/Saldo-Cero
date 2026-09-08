@@ -28,3 +28,12 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 Implementación de StretchViewport y suavizado visual
 - Se añadieron StretchViewport en pantallas principales
 - Se activó filtrado lineal en fuentes/texturas para reducir pixelación
+
+## [0.1.3] - 08-09-2026
+
+### Añadido
+Mejoras visuales y renderizado de slots
+- Suavizado de texturas en el viewport
+- Incorporación de texturas para jugador, máquina de slots y símbolos
+- Implementación del renderizado y animación del juego de slots
+
