@@ -37,12 +37,3 @@ Mejoras visuales y renderizado de slots
 - Incorporación de texturas para jugador, máquina de slots y símbolos
 - Implementación del renderizado y animación del juego de slots
 
-## [0.1.4] - 17-09-2026
-
-### Añadido
-
-- Eliminar la clase Usuarios y crear el paquete/clase Entidades.
-- Mover la antigua clase Jugador (antes dentro de Usuarios) a Entidades.
-- Reorganizar colisiones para mantener únicamente ManejarColisiones.
-- Integrar ObjetoJuego y Obstaculo dentro de Entidades.
-- Corregir bug en el minijuego de slots/ruleta que permitía volver a girar mientras la animación de giro seguía activa.
