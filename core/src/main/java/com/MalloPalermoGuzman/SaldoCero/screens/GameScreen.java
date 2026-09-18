@@ -1,7 +1,9 @@
 package com.MalloPalermoGuzman.SaldoCero.screens;
 
 import com.MalloPalermoGuzman.SaldoCero.JuegoPrincipal;
-import com.MalloPalermoGuzman.SaldoCero.usuarios.Jugador;
+import com.MalloPalermoGuzman.SaldoCero.colisiones.ManejarColisiones;
+import com.MalloPalermoGuzman.SaldoCero.entidades.Jugador;
+import com.MalloPalermoGuzman.SaldoCero.entidades.Obstaculo;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -9,6 +11,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.ArrayList;
 
 public class GameScreen implements Screen {
 
@@ -19,6 +23,7 @@ public class GameScreen implements Screen {
     // Nueva clase para renderizar los slots
     private RenderSlots renderSlots;
     private Jugador jugador;
+    private ArrayList<Obstaculo>obstaculos;
 
     public GameScreen(JuegoPrincipal game) {
         this.game = game;
@@ -32,8 +37,12 @@ public class GameScreen implements Screen {
         camera.update();
 
         // Crear jugador y renderizador de slots
-        jugador = new Jugador("Fran");
+        jugador = new Jugador(100,200,"Fran");
         renderSlots = new RenderSlots(game, jugador);
+        obstaculos = new ArrayList<>();
+        obstaculos.add(new Obstaculo(200, 100));
+        obstaculos.add(new Obstaculo(300, 150));
+        obstaculos.add(new Obstaculo(400, 200));
     }
 
     @Override
@@ -43,8 +52,22 @@ public class GameScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         // Delegar el renderizado al sistema de slots
-        renderSlots.render(delta);
+        jugador.update(delta);
 
+        for (Obstaculo obs : obstaculos) {
+            if (ManejarColisiones.verificarChoque(jugador, obs)) {
+                jugador.deshacerMovimiento();
+                break;
+            }
+        }
+
+        game.batch.begin();
+        jugador.render(game.batch);
+        for (Obstaculo obs : obstaculos) {
+            obs.render(game.batch);
+        }
+        game.batch.end();
+        renderSlots.render(delta);
         // Volver al menú
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
             game.setScreen(new MainMenuScreen(game));
@@ -65,5 +88,9 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         renderSlots.dispose();
+        jugador.dispose();
+        for(Obstaculo obs: obstaculos){
+            obs.dispose();
+        }
     }
 }

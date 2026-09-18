@@ -1,7 +1,7 @@
 package com.MalloPalermoGuzman.SaldoCero.juegos;
 
 import com.MalloPalermoGuzman.SaldoCero.enums.Simbolo;
-import com.MalloPalermoGuzman.SaldoCero.usuarios.Jugador;
+import com.MalloPalermoGuzman.SaldoCero.entidades.Jugador;
 import com.badlogic.gdx.math.MathUtils;
 
 public class Slots {

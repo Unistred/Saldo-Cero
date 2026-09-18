@@ -2,7 +2,7 @@ package com.MalloPalermoGuzman.SaldoCero.screens;
 
 import com.MalloPalermoGuzman.SaldoCero.JuegoPrincipal;
 import com.MalloPalermoGuzman.SaldoCero.juegos.Slots;
-import com.MalloPalermoGuzman.SaldoCero.usuarios.Jugador;
+import com.MalloPalermoGuzman.SaldoCero.entidades.Jugador;
 import com.MalloPalermoGuzman.SaldoCero.enums.Simbolo;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
