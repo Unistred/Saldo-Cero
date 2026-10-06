@@ -1,4 +1,5 @@
-.gitkeep
+audio/efectos/slotGirando.wav
+audio/musica/musicaMenu.mp3
 texturas/hola
 texturas/juegos/slots/animacionSlot.png
 texturas/juegos/slots/campana.png

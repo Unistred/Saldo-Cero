@@ -58,4 +58,5 @@ public class Slots {
     public int getSaldoJugador() { return jugador.getSaldo(); }
     public int getApuesta() { return apuesta; }
     public String getMensaje() { return mensaje; }
+    public void setMensaje(String mensaje) {this.mensaje = mensaje;}
 }
