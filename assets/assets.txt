@@ -1,4 +1,3 @@
-.gitkeep
 texturas/hola
 texturas/juegos/slots/animacionSlot.png
 texturas/juegos/slots/campana.png

@@ -26,10 +26,10 @@ public class Jugador extends ObjetoJuego {
     public void update(float deltaTime) {
         anteriorY = this.y;
         anteriorX = this.x;
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) this.x += velocidad * deltaTime;
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))  this.x -= velocidad * deltaTime;
-        if (Gdx.input.isKeyPressed(Input.Keys.UP))    this.y += velocidad * deltaTime;
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN))  this.y -= velocidad * deltaTime;
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) this.x += velocidad * deltaTime;
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A))  this.x -= velocidad * deltaTime;
+        if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W))    this.y += velocidad * deltaTime;
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S))  this.y -= velocidad * deltaTime;
         getHitbox().setPosition(this.x, this.y);
     }
 

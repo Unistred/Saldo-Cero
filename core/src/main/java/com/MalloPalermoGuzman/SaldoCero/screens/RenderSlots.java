@@ -91,7 +91,7 @@ public class RenderSlots {
         game.batch.end();
 
         // Input
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !girando) {
             if (slots.intentarGirar()) {
                 girando = true;
                 tiempoAnimacion = 0f;
