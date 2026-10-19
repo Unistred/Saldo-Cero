@@ -20,7 +20,7 @@ public class GameScreen implements Screen {
     private OrthographicCamera camera;
     private Viewport viewport;
 
-    // Nueva clase para renderizar los slots
+
     private RenderSlots renderSlots;
     private Jugador jugador;
     private ArrayList<Obstaculo>obstaculos;
@@ -36,8 +36,8 @@ public class GameScreen implements Screen {
         camera.position.set(JuegoPrincipal.VIRTUAL_WIDTH / 2f, JuegoPrincipal.VIRTUAL_HEIGHT / 2f, 0);
         camera.update();
 
-        // Crear jugador y renderizador de slots
-        jugador = new Jugador(100,200,"Fran");
+
+        jugador = new Jugador(100,200,"julio");
         renderSlots = new RenderSlots(game, jugador);
         obstaculos = new ArrayList<>();
         obstaculos.add(new Obstaculo(200, 100));
@@ -51,7 +51,7 @@ public class GameScreen implements Screen {
         viewport.apply();
         game.batch.setProjectionMatrix(camera.combined);
 
-        // Delegar el renderizado al sistema de slots
+
         jugador.update(delta);
 
         for (Obstaculo obs : obstaculos) {
@@ -68,7 +68,7 @@ public class GameScreen implements Screen {
         }
         game.batch.end();
         renderSlots.render(delta);
-        // Volver al menú
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
             game.setScreen(new MainMenuScreen(game));
             dispose();

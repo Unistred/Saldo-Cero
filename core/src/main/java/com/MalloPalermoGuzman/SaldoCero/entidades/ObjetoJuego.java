@@ -9,19 +9,19 @@ public abstract class ObjetoJuego {
     private Rectangle hitbox;
 
     public ObjetoJuego(String rutaTextura, float x, float y) {
-    this.textura = new Texture(rutaTextura);
-    this.hitbox = new Rectangle(x, y, textura.getWidth(), textura.getHeight());
+        this.textura = new Texture(rutaTextura);
+        this.hitbox = new Rectangle(x, y, textura.getWidth(), textura.getHeight());
     }
     public abstract void update(float deltaTime);
 
-     public void render(SpriteBatch batch) {
-    batch.draw(textura, hitbox.x, hitbox.y, hitbox.width, hitbox.height);
-}
-public Rectangle getHitbox() {return hitbox;}
-public Texture getTextura(){
-         return textura;
-}
+    public void render(SpriteBatch batch) {
+        batch.draw(textura, hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+    }
+    public Rectangle getHitbox() {return hitbox;}
+    public Texture getTextura(){
+        return textura;
+    }
     public void dispose() {
-    textura.dispose();
+        textura.dispose();
     }
 }
