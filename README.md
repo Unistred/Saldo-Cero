@@ -1,4 +1,3 @@
-<img width="1479" height="650" alt="image" src="https://github.com/user-attachments/assets/2c557cd5-fb5d-4445-8a8d-75638c8582fa" /># Saldo-Cero
 
 ---
 
