@@ -1,4 +1,4 @@
-# Saldo-Cero
+<img width="1479" height="650" alt="image" src="https://github.com/user-attachments/assets/2c557cd5-fb5d-4445-8a8d-75638c8582fa" /># Saldo-Cero
 
 ---
 
@@ -28,9 +28,12 @@ Ambientado en un casino y entornos urbanos de clase media-baja, el jugador contr
 --Documentación Completa (Wiki)
 La propuesta formal y detallada del videojuego, que incluye el alcance mínimo, el alcance deseado, el esquema relacional de la base de datos y el desglose de la historia por semanas, se encuentra disponible en la documentación oficial del repositorio:
 
+El videojuego tiene un video corto explicativo y demostrativo acerca de este mismo publicado en YouTube donde se ven las características principales del juego.
 
+**[Video Explicativo y Demostrativo] (https://www.youtube.com/watch?v=mJJ-EVsvJec)**
 **[Ver la Propuesta Detallada en la Wiki de GitHub](https://github.com/Unistred/Saldo-Cero/wiki/Propuesta-del-Proyecto-%5BSaldo-Cero%5D)**
 ---
+
 
 ### Prerrequisitos Técnicos
 Para poder compilar y ejecutar este proyecto, necesita tener instaladas únicamente dos cosas en su computadora:
