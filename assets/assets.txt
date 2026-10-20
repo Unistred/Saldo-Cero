@@ -1,3 +1,5 @@
+audio/efectos/slotGirando.wav
+audio/musica/musicaMenu.mp3
 texturas/hola
 texturas/juegos/slots/animacionSlot.png
 texturas/juegos/slots/campana.png
@@ -6,6 +8,10 @@ texturas/juegos/slots/diamante.png
 texturas/juegos/slots/moneda.png
 texturas/juegos/slots/siete.png
 texturas/juegos/slots/slot.png
+texturas/mapa/Bloques.tsx
+texturas/mapa/Sprite-0001.png
+texturas/mapa/casino saldo ceri.tmx
+texturas/mapa/casino_saldo_cero.tmx
 texturas/menu/exitMenu.png
 texturas/menu/logoMenuSaldoCero.png
 texturas/menu/startMenu.png

@@ -8,7 +8,7 @@ public class Jugador extends ObjetoJuego {
     private int saldo = 500;
     private int cordura = 100;
     private float x, y;
-    private int velocidad;
+    private int velocidad = 150;
     private float anteriorX, anteriorY;
     public Jugador(float x, float y, String nombre) {
         super("texturas/personajes/jugador/jugadorAnimacionAD.png", x, y);

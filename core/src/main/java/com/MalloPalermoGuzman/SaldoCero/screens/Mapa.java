@@ -154,12 +154,14 @@ public class Mapa implements Screen {
                 break;
             }
         }
+
         for(Obstaculo slot : slots){
             if (ManejarColisiones.verificarChoque(jugador, slot)){
                 jugador.deshacerMovimiento();
                 break;
             }
         }
+
         boolean cerca = verificarCercaDeSlot();
         if (cerca && Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             jugandoSlots = true;

@@ -22,7 +22,6 @@ public class RenderSlots {
     private Texture maquinaSlot;
     private HashMap<Simbolo, Texture> simbolos;
 
-    // Animación de giro
     private Animation<TextureRegion> animacionRodillo;
     private float tiempoAnimacion;
     private boolean girando;
@@ -30,19 +29,13 @@ public class RenderSlots {
     public RenderSlots(JuegoPrincipal game, Jugador jugador) {
         this.game = game;
         this.slots = new Slots(jugador, 10);
-
-        // Máquina base
         maquinaSlot = new Texture(Gdx.files.internal("texturas/juegos/slots/slot.png"));
-
-        // Símbolos
         simbolos = new HashMap<>();
         simbolos.put(Simbolo.CEREZA, new Texture(Gdx.files.internal("texturas/juegos/slots/cereza.png")));
         simbolos.put(Simbolo.DIAMANTE, new Texture(Gdx.files.internal("texturas/juegos/slots/diamante.png")));
         simbolos.put(Simbolo.SIETE, new Texture(Gdx.files.internal("texturas/juegos/slots/siete.png")));
         simbolos.put(Simbolo.CAMPANA, new Texture(Gdx.files.internal("texturas/juegos/slots/campana.png")));
         simbolos.put(Simbolo.MONEDA, new Texture(Gdx.files.internal("texturas/juegos/slots/moneda.png")));
-
-        // Spritesheet de animación
         Texture sheet = new Texture(Gdx.files.internal("texturas/juegos/slots/animacionSlot.png"));
         TextureRegion[][] frames = TextureRegion.split(sheet, 64, 64); // tamaño de cada frame
         TextureRegion[] secuencia = new TextureRegion[frames[0].length];
@@ -56,51 +49,45 @@ public class RenderSlots {
 
     public void render(float delta) {
         ScreenUtils.clear(0.1f, 0.1f, 0.15f, 1f);
-
         game.batch.begin();
-
-        // Dibujar máquina base
         game.batch.draw(maquinaSlot, 200, 150, 256, 256);
 
         if (girando) {
-            // Mostrar animación completa del slot girando
             tiempoAnimacion += delta;
             TextureRegion frame = animacionRodillo.getKeyFrame(tiempoAnimacion, true);
             game.batch.draw(frame, 200, 150, 256, 256); // reemplaza la máquina vacía
 
-            if (tiempoAnimacion > 1.5f) {
+            if (tiempoAnimacion > 4.4f) {
                 girando = false;
                 slots.girarRodillos();
                 slots.evaluarResultado();
             }
         } else {
-            // Mostrar máquina vacía y los símbolos finales
             game.batch.draw(maquinaSlot, 200, 150, 256, 256);
             game.batch.draw(simbolos.get(slots.getRodillo1()), 192, 188, 164f, 164f);
             game.batch.draw(simbolos.get(slots.getRodillo2()), 242, 188, 164f, 164f);
             game.batch.draw(simbolos.get(slots.getRodillo3()), 294, 188, 164f, 164f);
         }
-
-
-        // Mensaje y saldo
         game.font.setColor(Color.GOLD);
         game.font.draw(game.batch, slots.getMensaje(), 220, 120);
         game.font.setColor(Color.GREEN);
         game.font.draw(game.batch, "Saldo: $" + slots.getSaldoJugador(), 220, 90);
-
         game.batch.end();
-
-        // Input
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !girando) {
-            if (slots.intentarGirar()) {
-                girando = true;
-                tiempoAnimacion = 0f;
-            }
+            if (!girando) {
+                if (slots.intentarGirar()) {
+                    girando = true;
+                    tiempoAnimacion = 0f;
+                    game.gestorSonido.reproducirGirar();
+                }
+            } else {
+                slots.setMensaje("Espere a que termine de girar para volver a girar.");
+            }}
+        }
+
+        public void dispose() {
+            maquinaSlot.dispose();
+            for (Texture t : simbolos.values()) t.dispose();
         }
     }
 
-    public void dispose() {
-        maquinaSlot.dispose();
-        for (Texture t : simbolos.values()) t.dispose();
-    }
-}

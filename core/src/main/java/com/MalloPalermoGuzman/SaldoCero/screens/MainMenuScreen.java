@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.MalloPalermoGuzman.SaldoCero.gestores.GestorMusica;
 
 public class MainMenuScreen implements Screen {
 
@@ -30,13 +31,15 @@ public class MainMenuScreen implements Screen {
         this.game = game;
     }
 
+
     @Override
     public void show() {
         camera = new OrthographicCamera();
         viewport = new FitViewport(JuegoPrincipal.VIRTUAL_WIDTH, JuegoPrincipal.VIRTUAL_HEIGHT, camera);
         stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
-
+        game.gestorMusica.reproducir("musicaMenu.mp3", true);
+        game.gestorMusica.fijarVolumen(0.5f);
         logoSaldoCero = JuegoPrincipal.cargarTextura("texturas/menu/logoMenuSaldoCero.png");
         startMenu     = JuegoPrincipal.cargarTextura("texturas/menu/startMenu.png");
         exitMenu      = JuegoPrincipal.cargarTextura("texturas/menu/exitMenu.png");
@@ -89,13 +92,18 @@ public class MainMenuScreen implements Screen {
         viewport.update(width, height, true);
     }
 
-    @Override public void pause() {}
-    @Override public void resume() {}
+    @Override public void pause() {
+        game.gestorMusica.pausar();
+    }
+    @Override public void resume() {
+        game.gestorMusica.reanudar();
+    }
     @Override public void hide() {}
     @Override public void dispose() {
         logoSaldoCero.dispose();
         startMenu.dispose();
         exitMenu.dispose();
         stage.dispose();
+        game.gestorMusica.dispose();
     }
 }
