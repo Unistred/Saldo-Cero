@@ -30,6 +30,7 @@ La propuesta formal y detallada del videojuego, que incluye el alcance mínimo, 
 El videojuego tiene un video corto explicativo y demostrativo acerca de este mismo publicado en YouTube donde se ven las características principales del juego.
 
 **[Video Explicativo y Demostrativo] (https://www.youtube.com/watch?v=mJJ-EVsvJec)**
+
 **[Ver la Propuesta Detallada en la Wiki de GitHub](https://github.com/Unistred/Saldo-Cero/wiki/Propuesta-del-Proyecto-%5BSaldo-Cero%5D)**
 ---
 
