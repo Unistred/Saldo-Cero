@@ -31,3 +31,14 @@ Mejoras visuales y renderizado de slots
 - Reorganizar colisiones para mantener únicamente ManejarColisiones.
 - Integrar ObjetoJuego y Obstaculo dentro de Entidades.
 - Corregir bug en el minijuego de slots/ruleta que permitía volver a girar mientras la animación de giro seguía activa.
+
+## [1.0.0] - 19-10-2026
+### Añadido
+- Integración completa de sistemas de audio, slots y corrección de movimiento en el mapa
+- Implementación de GestorMusica y GestorSonido para la gestión centralizada de pistas de fondo y efectos especiales.
+- Incorporación de archivos multimedia de audio (.mp3 y .wav) y conexión del sonido de giro en las máquinas tragamonedas.
+- Creación de la clase RenderSlots con soporte para animaciones de rodillos mediante Animation<TextureRegion>.
+- Integración de la estructura del mapa de Tiled (casino_saldo_cero.tmx) con OrthogonalTiledMapRenderer.
+- Corrección de la velocidad del jugador (fijada en 150f) para solucionar el bloqueo de movimiento en el mapa.
+- Configuración del sistema de colisiones con paredes y slots utilizando Intersector y ManejarColisiones.
+- Implementación de la cámara seguidora con ExtendViewport y el HUD dinámico de saldo, cordura y avisos en pantalla.
