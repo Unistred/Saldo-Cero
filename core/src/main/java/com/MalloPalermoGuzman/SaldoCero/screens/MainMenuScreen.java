@@ -60,7 +60,7 @@ public class MainMenuScreen implements Screen {
         botonStart.addListener(new com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new Mapa(game));
                 dispose();
             }
         });

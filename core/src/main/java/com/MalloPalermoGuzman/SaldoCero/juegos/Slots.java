@@ -16,6 +16,7 @@ public class Slots {
         this.jugador = jugador;
         this.apuesta = apuestaInicial;
     }
+
     public boolean intentarGirar() {
         if (jugador.descontarSaldo(apuesta) >= 0) {
             jugador.setSaldo(jugador.getSaldo() - apuesta);
