@@ -43,6 +43,6 @@ Mejoras visuales y renderizado de slots
 - Configuración del sistema de colisiones con paredes y slots utilizando Intersector y ManejarColisiones.
 - Implementación de la cámara seguidora con ExtendViewport y el HUD dinámico de saldo, cordura y avisos en pantalla.
 
-## [0.2.1] - 22-10-2026
+## [0.2.1] - 09-11-2026
 ### Añadido
 - Corrección de la textura de la animacion del jugador y ajuste de hitbox para mejorar la interacción con el entorno y la detección de colisiones. La textura del jugador ahora es de 25x28 píxeles, y la hitbox se ajusta a 25x28 píxeles para reflejar con precisión la forma del personaje y permitir un movimiento más fluido y realista dentro del mapa.
