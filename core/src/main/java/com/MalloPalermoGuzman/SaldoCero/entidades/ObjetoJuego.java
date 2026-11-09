@@ -8,9 +8,9 @@ public abstract class ObjetoJuego {
     private Texture textura;
     private Rectangle hitbox;
 
-    public ObjetoJuego(String rutaTextura, float x, float y) {
+    public ObjetoJuego(String rutaTextura, float x, float y, float widthCelda, float heightCelda) {
         this.textura = new Texture(rutaTextura);
-        this.hitbox = new Rectangle(x, y, textura.getWidth(), textura.getHeight());
+        this.hitbox = new Rectangle(x, y, widthCelda, heightCelda);
     }
     public abstract void update(float deltaTime);
 

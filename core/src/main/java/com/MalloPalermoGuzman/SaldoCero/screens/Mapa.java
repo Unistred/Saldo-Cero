@@ -127,8 +127,6 @@ public class Mapa implements Screen {
         slots = new ArrayList<>();
         cargarParedes();
         jugador = new Jugador(512, 640, "julio");
-        jugador.getHitbox().setSize(32, 32);
-        spriteJugador = new TextureRegion(jugador.getTextura(), 0, 0, 32, 32);
 
         renderSlots = new RenderSlots(juegoPrincipal, jugador);
         jugandoSlots = false;
@@ -174,8 +172,7 @@ public class Mapa implements Screen {
         renderer.render();
         juegoPrincipal.batch.setProjectionMatrix(camera.combined);
         juegoPrincipal.batch.begin();
-        Rectangle hitbox = jugador.getHitbox();
-        juegoPrincipal.batch.draw(spriteJugador, hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+        jugador.render(juegoPrincipal.batch);
         dibujarHud(cerca);
         juegoPrincipal.batch.end();
     }

@@ -50,6 +50,7 @@ public class Slots {
         }
         else {
             mensaje = "No hubo ninguna coincidencia, intente de nuevo";
+            jugador.descontarCordura(5);
         }
     }
 

@@ -1,6 +1,5 @@
 audio/efectos/slotGirando.wav
 audio/musica/musicaMenu.mp3
-texturas/hola
 texturas/juegos/slots/animacionSlot.png
 texturas/juegos/slots/campana.png
 texturas/juegos/slots/cereza.png
@@ -17,5 +16,4 @@ texturas/menu/logoMenuSaldoCero.png
 texturas/menu/startMenu.png
 texturas/personajes/guardias/guardia2.png
 texturas/personajes/guardias/guerdia1.png
-texturas/personajes/jugador/jugadorAnimacionAD.png
-texturas/personajes/jugador/jugadorAnimacionWS.png
+texturas/personajes/jugador/jugadorAnimacionWASD.png

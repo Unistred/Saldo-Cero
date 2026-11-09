@@ -32,7 +32,7 @@ Mejoras visuales y renderizado de slots
 - Integrar ObjetoJuego y Obstaculo dentro de Entidades.
 - Corregir bug en el minijuego de slots/ruleta que permitía volver a girar mientras la animación de giro seguía activa.
 
-## [1.0.0] - 19-10-2026
+## [0.2.0] - 19-10-2026
 ### Añadido
 - Integración completa de sistemas de audio, slots y corrección de movimiento en el mapa
 - Implementación de GestorMusica y GestorSonido para la gestión centralizada de pistas de fondo y efectos especiales.
@@ -42,3 +42,7 @@ Mejoras visuales y renderizado de slots
 - Corrección de la velocidad del jugador (fijada en 150f) para solucionar el bloqueo de movimiento en el mapa.
 - Configuración del sistema de colisiones con paredes y slots utilizando Intersector y ManejarColisiones.
 - Implementación de la cámara seguidora con ExtendViewport y el HUD dinámico de saldo, cordura y avisos en pantalla.
+
+## [0.2.1] - 22-10-2026
+### Añadido
+- Corrección de la textura de la animacion del jugador y ajuste de hitbox para mejorar la interacción con el entorno y la detección de colisiones. La textura del jugador ahora es de 25x28 píxeles, y la hitbox se ajusta a 25x28 píxeles para reflejar con precisión la forma del personaje y permitir un movimiento más fluido y realista dentro del mapa.
