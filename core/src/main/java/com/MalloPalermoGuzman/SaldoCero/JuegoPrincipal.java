@@ -1,5 +1,6 @@
 package com.MalloPalermoGuzman.SaldoCero;
 
+import com.MalloPalermoGuzman.SaldoCero.entidades.Jugador;
 import com.MalloPalermoGuzman.SaldoCero.gestores.GestorMusica;
 import com.MalloPalermoGuzman.SaldoCero.gestores.GestorSonido;
 import com.MalloPalermoGuzman.SaldoCero.screens.MainMenuScreen;
@@ -17,6 +18,9 @@ public class JuegoPrincipal extends Game {
     public BitmapFont font;
     public GestorMusica gestorMusica;
     public GestorSonido gestorSonido;
+    public Jugador jugador;
+    public String nombreJugador = "";
+    public int idJugador = -1;
     public static Texture cargarTextura(String ruta) {
         Texture texture = new Texture(Gdx.files.internal(ruta), true);
         texture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Nearest);
@@ -41,7 +45,10 @@ public class JuegoPrincipal extends Game {
 
     @Override
     public void dispose() {
+        if (jugador != null) jugador.dispose();
         batch.dispose();
         font.dispose();
+        gestorSonido.dispose();
+        gestorMusica.dispose();
     }
 }

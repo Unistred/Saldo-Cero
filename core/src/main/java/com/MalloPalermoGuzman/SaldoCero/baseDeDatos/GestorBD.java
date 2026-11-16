@@ -135,6 +135,37 @@ public class GestorBD {
             System.out.println("Error en procedimiento de apuesta: " + e.getMessage());
         }
     }
+
+    public static int guardarNombreJugador(String nombreUsuario) {
+        String crear = "CREATE TABLE IF NOT EXISTS Jugador (" +
+                " id_jugador INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " nombre_usuario TEXT NOT NULL," +
+                " fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP)";
+        String buscar = "SELECT id_jugador FROM Jugador WHERE nombre_usuario = ?";
+        String insertar = "INSERT INTO Jugador (nombre_usuario) VALUES (?)";
+
+        try (Connection conn = conectar()) {
+            if (conn == null) return -1;
+            try (Statement stmt = conn.createStatement()) {
+                stmt.execute(crear);
+            }
+            try (PreparedStatement ps = conn.prepareStatement(buscar)) {
+                ps.setString(1, nombreUsuario);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) return rs.getInt("id_jugador");
+            }
+            try (PreparedStatement ps = conn.prepareStatement(insertar, Statement.RETURN_GENERATED_KEYS)) {
+                ps.setString(1, nombreUsuario);
+                ps.executeUpdate();
+                ResultSet keys = ps.getGeneratedKeys();
+                if (keys.next()) return keys.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al guardar el nombre: " + e.getMessage());
+        }
+        return -1;
+    }
+
     public static void insertarJugador(String nombreUsuario) {
         String sql = "INSERT INTO Jugador (nombre_usuario) VALUES (?);";
 
@@ -166,7 +197,6 @@ public class GestorBD {
             pstmt.setDouble(4, montoGanado);
             pstmt.setDouble(5, saldoResultante);
             pstmt.setInt(6, corduraResultante);
-
             pstmt.executeUpdate();
             System.out.println("¡Apuesta registrada correctamente!");
 

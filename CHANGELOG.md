@@ -46,3 +46,7 @@ Mejoras visuales y renderizado de slots
 ## [0.2.1] - 09-11-2026
 ### Añadido
 - Corrección de la textura de la animacion del jugador y ajuste de hitbox para mejorar la interacción con el entorno y la detección de colisiones. La textura del jugador ahora es de 25x28 píxeles, y la hitbox se ajusta a 25x28 píxeles para reflejar con precisión la forma del personaje y permitir un movimiento más fluido y realista dentro del mapa.
+
+## [0.2.2] - 16-11-2026
+### añadido
+- creacion de la base de datos con sqlLite

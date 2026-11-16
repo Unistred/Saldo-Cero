@@ -7,6 +7,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -47,6 +48,10 @@ public class Mapa implements Screen {
     private OrthographicCamera cameraSlots;
     private Viewport viewportSlots;
     private boolean jugandoSlots = false;
+    private String[] OPCIONES_PAUSA = {"Continuar", "Menu principal"};
+    private boolean pausado = false;
+    private int opcionPausa = 0;
+    private final GlyphLayout textoLayout = new GlyphLayout();
 
     public Mapa(JuegoPrincipal juegoPrincipal) {
         this.juegoPrincipal = juegoPrincipal;
@@ -126,10 +131,13 @@ public class Mapa implements Screen {
         paredes = new ArrayList<>();
         slots = new ArrayList<>();
         cargarParedes();
-        jugador = new Jugador(512, 640, "julio");
-
+        if (juegoPrincipal.jugador == null) {
+            juegoPrincipal.jugador = new Jugador(512, 640, "julio");
+        }
+        jugador = juegoPrincipal.jugador;
         renderSlots = new RenderSlots(juegoPrincipal, jugador);
         jugandoSlots = false;
+        pausado = false;
         seguirJugador();
         camera.update();
     }
@@ -140,27 +148,31 @@ public class Mapa implements Screen {
             renderizarSlots(delta);
             return;
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-            juegoPrincipal.setScreen(new MainMenuScreen(juegoPrincipal));
-            dispose();
-            return;
+        if (pausado) {
+            if (procesarPausa()) return; // true = se salio al menu principal
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            pausado = true;
+            opcionPausa = 0;
         }
-        jugador.update(delta);
-        for(Rectangle pared : paredes){
-            if (Intersector.overlaps(jugador.getHitbox(), pared)){
-                jugador.deshacerMovimiento();
-                break;
+
+        if (!pausado) {
+            jugador.update(delta);
+            for(Rectangle pared : paredes){
+                if (Intersector.overlaps(jugador.getHitbox(), pared)){
+                    jugador.deshacerMovimiento();
+                    break;
+                }
+            }
+
+            for(Obstaculo slot : slots){
+                if (ManejarColisiones.verificarChoque(jugador, slot)){
+                    jugador.deshacerMovimiento();
+                    break;
+                }
             }
         }
 
-        for(Obstaculo slot : slots){
-            if (ManejarColisiones.verificarChoque(jugador, slot)){
-                jugador.deshacerMovimiento();
-                break;
-            }
-        }
-
-        boolean cerca = verificarCercaDeSlot();
+        boolean cerca = !pausado && verificarCercaDeSlot();
         if (cerca && Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             jugandoSlots = true;
         }
@@ -174,7 +186,63 @@ public class Mapa implements Screen {
         juegoPrincipal.batch.begin();
         jugador.render(juegoPrincipal.batch);
         dibujarHud(cerca);
+        if (pausado) dibujarPausa();
         juegoPrincipal.batch.end();
+    }
+
+    private boolean procesarPausa() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            pausado = false;
+            return false;
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP) || Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+            opcionPausa = (opcionPausa + OPCIONES_PAUSA.length - 1) % OPCIONES_PAUSA.length;
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN) || Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+            opcionPausa = (opcionPausa + 1) % OPCIONES_PAUSA.length;
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            if (opcionPausa == 0) {
+                pausado = false;            // Continuar
+            } else {
+                volverAlMenuPrincipal();    // Menu principal
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void volverAlMenuPrincipal() {
+        // El jugador NO se libera aca: es de JuegoPrincipal y conserva saldo y cordura.
+        juegoPrincipal.setScreen(new MainMenuScreen(juegoPrincipal));
+        dispose();
+    }
+
+    private void dibujarPausa() {
+        float ancho = viewport.getWorldWidth();
+        float alto = viewport.getWorldHeight();
+        float centroX = camera.position.x;
+        float centroY = camera.position.y;
+        float izq = centroX - ancho / 2;
+        float abajo = centroY - alto / 2;
+
+        juegoPrincipal.batch.draw(fondoHud, izq, abajo, ancho, alto);
+
+        juegoPrincipal.font.setColor(Color.WHITE);
+        escribirCentrado("PAUSA", centroX, centroY + 60);
+        for (int i = 0; i < OPCIONES_PAUSA.length; i++) {
+            boolean elegida = (i == opcionPausa);
+            juegoPrincipal.font.setColor(elegida ? Color.GOLD : Color.LIGHT_GRAY);
+            escribirCentrado((elegida ? "> " : "") + OPCIONES_PAUSA[i], centroX, centroY + 10 - i * 30);
+        }
+        juegoPrincipal.font.setColor(Color.GRAY);
+        escribirCentrado("W/S o flechas: mover   ENTER: elegir   ESC: continuar", centroX, abajo + 30);
+        juegoPrincipal.font.setColor(Color.WHITE);
+    }
+
+    private void escribirCentrado(String texto, float centroX, float y) {
+        textoLayout.setText(juegoPrincipal.font, texto);
+        juegoPrincipal.font.draw(juegoPrincipal.batch, textoLayout, centroX - textoLayout.width / 2, y);
     }
     private void dibujarHud(boolean cerca) {
         float ancho = viewport.getWorldWidth();
@@ -186,7 +254,7 @@ public class Mapa implements Screen {
         juegoPrincipal.font.setColor(Color.WHITE);
         juegoPrincipal.font.draw(juegoPrincipal.batch, "Saldo: $" + jugador.getSaldo(), izq + 12, arriba - 8);
         juegoPrincipal.font.draw(juegoPrincipal.batch, "Cordura: " + jugador.getCordura(), izq + 150, arriba - 8);
-        juegoPrincipal.font.draw(juegoPrincipal.batch, "M: Menu principal", izq + ancho - 130, arriba - 8);
+        juegoPrincipal.font.draw(juegoPrincipal.batch, "ESC: Pausa", izq + ancho - 80, arriba - 8);
 
         if (cerca) {
             juegoPrincipal.batch.draw(fondoHud, izq, abajo, ancho, 28);
@@ -234,7 +302,7 @@ public class Mapa implements Screen {
         map.dispose();
         renderer.dispose();
         if (fondoHud != null) fondoHud.dispose();
-        if (jugador != null) jugador.dispose();
+        // El jugador no se libera aca: lo administra JuegoPrincipal (ver JuegoPrincipal.dispose).
         if (renderSlots != null) renderSlots.dispose();
         for(Obstaculo slot : slots){
             slot.dispose();
