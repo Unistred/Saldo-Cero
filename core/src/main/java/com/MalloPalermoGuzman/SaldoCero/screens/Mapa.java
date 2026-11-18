@@ -148,15 +148,15 @@ public class Mapa implements Screen {
             renderizarSlots(delta);
             return;
         }
-        if (pausado) {
+        if (procesarPausa()) {
             if (procesarPausa()) return; // true = se salio al menu principal
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+        } else if (juegoPrincipal.controladorEntrada.quiereVolver()) {
             pausado = true;
             opcionPausa = 0;
         }
 
         if (!pausado) {
-            jugador.update(delta);
+            jugador.update(delta, juegoPrincipal.controladorEntrada.getDireccionMovimiento());
             for(Rectangle pared : paredes){
                 if (Intersector.overlaps(jugador.getHitbox(), pared)){
                     jugador.deshacerMovimiento();
@@ -173,7 +173,7 @@ public class Mapa implements Screen {
         }
 
         boolean cerca = !pausado && verificarCercaDeSlot();
-        if (cerca && Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+        if (cerca && juegoPrincipal.controladorEntrada.quiereInteractuar()) {
             jugandoSlots = true;
         }
         seguirJugador();
@@ -191,7 +191,7 @@ public class Mapa implements Screen {
     }
 
     private boolean procesarPausa() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+        if (juegoPrincipal.controladorEntrada.quiereVolver()) {
             pausado = false;
             return false;
         }

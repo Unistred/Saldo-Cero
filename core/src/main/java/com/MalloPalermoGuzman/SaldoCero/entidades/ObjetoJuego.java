@@ -9,7 +9,7 @@ public abstract class ObjetoJuego {
     private Rectangle hitbox;
 
     public ObjetoJuego(String rutaTextura, float x, float y, float widthCelda, float heightCelda) {
-        this.textura = new Texture(rutaTextura);
+        this.textura = rutaTextura != null ? new Texture(rutaTextura) : null;
         this.hitbox = new Rectangle(x, y, widthCelda, heightCelda);
     }
     public abstract void update(float deltaTime);

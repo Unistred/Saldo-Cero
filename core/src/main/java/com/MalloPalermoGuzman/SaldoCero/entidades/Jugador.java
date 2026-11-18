@@ -1,12 +1,11 @@
 package com.MalloPalermoGuzman.SaldoCero.entidades;
 
 import com.MalloPalermoGuzman.SaldoCero.enums.Direccion;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 public class Jugador extends ObjetoJuego {
     private String nombre;
@@ -30,49 +29,47 @@ public class Jugador extends ObjetoJuego {
         this.y = anteriorY;
         getHitbox().setPosition(this.x,this.y);
     }
+    // Requerido por ObjetoJuego: sin direccion no hay movimiento.
     @Override
     public void update(float deltaTime) {
+        update(deltaTime, Vector2.Zero);
+    }
+
+    /** direccion: ya normalizada (largo 1 o 0), la entrega ControladorEntrada. */
+    public void update(float deltaTime, Vector2 direccion) {
         anteriorY = this.y;
         anteriorX = this.x;
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) this.x += velocidad * deltaTime;
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A))  this.x -= velocidad * deltaTime;
-        if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W))    this.y += velocidad * deltaTime;
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S))  this.y -= velocidad * deltaTime;
+        this.x += direccion.x * velocidad * deltaTime;
+        this.y += direccion.y * velocidad * deltaTime;
         actualizarAnimacion(deltaTime, this.x - anteriorX, this.y - anteriorY);
         getHitbox().setPosition(this.x, this.y);
     }
     private void cargarAnimaciones() {
-        // Corta la hoja en celdas: celdas[fila][columna]
         TextureRegion[][] celdas = TextureRegion.split(getTextura(), 25, 28);
 
         TextureRegion[] derecha = celdas[0];
         TextureRegion[] abajo   = celdas[1];
         TextureRegion[] arriba  = celdas[2];
-
-        // Izquierda: COPIAS de los cuadros de derecha, espejadas una sola vez
         TextureRegion[] izquierda = new TextureRegion[derecha.length];
         for (int i = 0; i < derecha.length; i++) {
-            izquierda[i] = new TextureRegion(derecha[i]); // copia
-            izquierda[i].flip(true, false);               // espejo horizontal
+            izquierda[i] = new TextureRegion(derecha[i]);
+            izquierda[i].flip(true, false);
         }
-
         animDerecha   = new Animation<>(0.1f, derecha);
         animIzquierda = new Animation<>(0.1f, izquierda);
         animAbajo     = new Animation<>(0.1f, abajo);
         animArriba    = new Animation<>(0.1f, arriba);
     }
-    // Se llama desde update(), con el movimiento (dx, dy) que ya calculás ahí
     private void actualizarAnimacion(float delta, float dx, float dy) {
         boolean seMueve = dx != 0 || dy != 0;
         if (seMueve) {
-            // En diagonal gana la dirección horizontal
             if (dx > 0)      mirando = Direccion.DERECHA;
             else if (dx < 0) mirando = Direccion.IZQUIERDA;
             else if (dy > 0) mirando = Direccion.ARRIBA;
             else             mirando = Direccion.ABAJO;
             tiempoAnimacion += delta;
         } else {
-            tiempoAnimacion = 0f; // quieto: se queda en el primer cuadro de la última dirección
+            tiempoAnimacion = 0f;
         }
     }
 
@@ -83,7 +80,7 @@ public class Jugador extends ObjetoJuego {
             case ARRIBA    -> animArriba;
             case ABAJO     -> animAbajo;
         };
-        return anim.getKeyFrame(tiempoAnimacion, true); // true = en bucle
+        return anim.getKeyFrame(tiempoAnimacion, true);
     }
     @Override
     public void render(SpriteBatch batch) {
@@ -106,5 +103,3 @@ public class Jugador extends ObjetoJuego {
         this.cordura -= descontado;
     }
 }
-
-

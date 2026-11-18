@@ -1,4 +1,4 @@
-### Añadido
+a### Añadido
 - Configuración de navegación entre pantallas principales (MainMenuScreen y GameScreen) usando la clase Game de LibGDX.
 - Creación del enum Simbolo para representar las figuras y multiplicadores de la tragamonedas.
 - Implementación del enum EstadoJugador para el control de movimiento/interacción.
@@ -48,5 +48,28 @@ Mejoras visuales y renderizado de slots
 - Corrección de la textura de la animacion del jugador y ajuste de hitbox para mejorar la interacción con el entorno y la detección de colisiones. La textura del jugador ahora es de 25x28 píxeles, y la hitbox se ajusta a 25x28 píxeles para reflejar con precisión la forma del personaje y permitir un movimiento más fluido y realista dentro del mapa.
 
 ## [0.2.2] - 16-11-2026
-### añadido
-- creacion de la base de datos con sqlLite
+### Añadido
+- Creacion de la base de datos con sqlLite
+
+## [0.2.3] - 17-11-2026
+### Añadido
+## Arreglo de bugs
+- Corregida la velocidad del movimiento diagonal del jugador, evitando que sea superior a la del movimiento horizontal o vertical.
+- Corregida la gestión del volumen para evitar que los valores superen los límites establecidos.
+- Corregido el control del volumen inicial de los efectos de sonido, estableciéndolo en un 50%.
+- Corregida la administración de recursos para evitar liberar gestores de música que siguen siendo utilizados.
+- Mejorada la liberación de recursos al cerrar el juego, incluyendo la pantalla activa y los elementos compartidos.
+
+## Mejoras de estructura del codigo
+
+- Incorporado ControladorEntrada para centralizar la lectura del teclado y separar los controles de la lógica del juego.
+- Modificada la clase Jugador para recibir la dirección de movimiento mediante Vector2, desacoplando el movimiento de la lectura directa del teclado.
+- Normalizada la dirección de movimiento para mantener una velocidad uniforme en todas las direcciones.
+- Modificada ObjetoJuego para permitir objetos sin textura, conservando únicamente su hitbox cuando corresponde.
+- Optimizada la clase Obstaculo para utilizar solamente su hitbox, evitando cargar texturas innecesarias.
+- Centralizada en JuegoPrincipal la gestión global del volumen y el silencio de música y efectos de sonido.
+- Incorporados controles independientes para subir, bajar y silenciar el volumen mediante el teclado (+, - y N).
+- Mejorados GestorMusica y GestorSonido para conservar el volumen configurado y aplicar correctamente el estado de silencio.
+- Mejorada la administración de la música del menú, incorporando su detención al iniciar el juego.
+- Incorporada la visualización del volumen y del estado de silencio en el menú principal y en el HUD del mapa.
+- Modificado Mapa para delegar el movimiento, la interacción y la pausa mediante el controlador de entrada, manteniendo la navegación del menú de pausa con su implementación actual.
