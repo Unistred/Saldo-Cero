@@ -79,7 +79,13 @@ public class PantallaGuardarNombre implements Screen {
         }
         game.nombreJugador = limpio;
         game.idJugador = id;
-        irAlMenu();
+        irAlMapa();
+    }
+
+    private void irAlMapa() {
+        Gdx.input.setInputProcessor(null);
+        game.setScreen(new Mapa(game));
+        dispose();
     }
 
     private void irAlMenu() {
@@ -102,7 +108,7 @@ public class PantallaGuardarNombre implements Screen {
         game.font.draw(game.batch, "Guarda tu nombre antes de salir", centroX - 100, 280);
         game.font.draw(game.batch, "Nombre: " + nombre + cursor, centroX - 100, 200);
         game.font.setColor(Color.LIGHT_GRAY);
-        game.font.draw(game.batch, "ENTER: guardar y volver al menu", centroX - 100, 120);
+        game.font.draw(game.batch, "ENTER: guardar y jugar", centroX - 100, 120);
         game.font.draw(game.batch, "ESC: volver al menu sin guardar", centroX - 100, 95);
         if (!mensaje.isEmpty()) {
             game.font.setColor(Color.SALMON);

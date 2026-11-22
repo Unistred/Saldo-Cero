@@ -15,13 +15,15 @@ public abstract class ObjetoJuego {
     public abstract void update(float deltaTime);
 
     public void render(SpriteBatch batch) {
-        batch.draw(textura, hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+        if (textura != null) {
+            batch.draw(textura, hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+        }
     }
     public Rectangle getHitbox() {return hitbox;}
     public Texture getTextura(){
         return textura;
     }
     public void dispose() {
-        textura.dispose();
+        if (textura != null) textura.dispose();
     }
 }

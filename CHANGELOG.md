@@ -73,3 +73,14 @@ Mejoras visuales y renderizado de slots
 - Mejorada la administración de la música del menú, incorporando su detención al iniciar el juego.
 - Incorporada la visualización del volumen y del estado de silencio en el menú principal y en el HUD del mapa.
 - Modificado Mapa para delegar el movimiento, la interacción y la pausa mediante el controlador de entrada, manteniendo la navegación del menú de pausa con su implementación actual.
+
+## [0.2.4] - 21-11-2026
+### Añadido
+- Se agrega la estructura de datos y el estado de partida para manejar 3 niveles con saldo compartido, cordura por nivel y tiempo total. Los niveles se definen directamente en Java .
+- niveles/ConfigNivel: datos fijos de un nivel (tiempo, cordura inicial, cordura por apuesta, meta de saldo, penalizacion, probabilidad de perder, apuestas y dialogos de inicio/cierre).
+- niveles/ConfiguracionJuego: arma los 3 niveles, el dialogo final y la frase final en el metodo crear(). Avisa por consola si una pagina de dialogo supera los 150 caracteres.
+- niveles/Partida: estado de la partida en curso (nivel actual, saldo, cordura, tiempo restante y total). Incluye terminarNivel() con penalizacion de cordura si no se llega a la meta, avanzarNivel() y formato de tiempo mm:ss para el HUD y la pantalla final.
+
+## Modificado 
+- JuegoPrincipal: se crean configuracion y partida en create() y se agrega nuevaPartida() para reiniciar al empezar desde el menu.
+- ControladorEntrada: nuevos metodos quiereAvanzar(), quiereSalirDelNivel().

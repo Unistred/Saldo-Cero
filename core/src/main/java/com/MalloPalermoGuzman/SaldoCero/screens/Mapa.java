@@ -132,7 +132,7 @@ public class Mapa implements Screen {
         slots = new ArrayList<>();
         cargarParedes();
         if (juegoPrincipal.jugador == null) {
-            juegoPrincipal.jugador = new Jugador(512, 640, "julio");
+            juegoPrincipal.jugador = new Jugador(512, 640, juegoPrincipal.nombreJugador);
         }
         jugador = juegoPrincipal.jugador;
         renderSlots = new RenderSlots(juegoPrincipal, jugador);
@@ -148,7 +148,7 @@ public class Mapa implements Screen {
             renderizarSlots(delta);
             return;
         }
-        if (procesarPausa()) {
+        if (pausado) {
             if (procesarPausa()) return; // true = se salio al menu principal
         } else if (juegoPrincipal.controladorEntrada.quiereVolver()) {
             pausado = true;
@@ -254,6 +254,7 @@ public class Mapa implements Screen {
         juegoPrincipal.font.setColor(Color.WHITE);
         juegoPrincipal.font.draw(juegoPrincipal.batch, "Saldo: $" + jugador.getSaldo(), izq + 12, arriba - 8);
         juegoPrincipal.font.draw(juegoPrincipal.batch, "Cordura: " + jugador.getCordura(), izq + 150, arriba - 8);
+        juegoPrincipal.font.draw(juegoPrincipal.batch, juegoPrincipal.getTextoVolumen(), izq + 260, arriba - 8);
         juegoPrincipal.font.draw(juegoPrincipal.batch, "ESC: Pausa", izq + ancho - 80, arriba - 8);
 
         if (cerca) {
@@ -269,8 +270,9 @@ public class Mapa implements Screen {
         juegoPrincipal.batch.begin();
         juegoPrincipal.font.setColor(Color.WHITE);
         juegoPrincipal.font.draw(juegoPrincipal.batch, "ESC para volver al mapa", 220, 60);
+        juegoPrincipal.font.draw(juegoPrincipal.batch, juegoPrincipal.getTextoVolumen(), 500, 60);
         juegoPrincipal.batch.end();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+        if (juegoPrincipal.controladorEntrada.quiereVolver()) {
             jugandoSlots = false;
         }
     }

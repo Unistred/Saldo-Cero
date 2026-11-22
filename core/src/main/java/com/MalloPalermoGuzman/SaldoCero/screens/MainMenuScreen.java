@@ -3,6 +3,7 @@ package com.MalloPalermoGuzman.SaldoCero.screens;
 import com.MalloPalermoGuzman.SaldoCero.JuegoPrincipal;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.MalloPalermoGuzman.SaldoCero.gestores.GestorMusica;
 
 public class MainMenuScreen implements Screen {
 
@@ -39,7 +39,6 @@ public class MainMenuScreen implements Screen {
         stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
         game.gestorMusica.reproducir("musicaMenu.mp3", true);
-        game.gestorMusica.fijarVolumen(0.5f);
         logoSaldoCero = JuegoPrincipal.cargarTextura("texturas/menu/logoMenuSaldoCero.png");
         startMenu     = JuegoPrincipal.cargarTextura("texturas/menu/startMenu.png");
         exitMenu      = JuegoPrincipal.cargarTextura("texturas/menu/exitMenu.png");
@@ -61,7 +60,11 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 game.gestorMusica.detener();
-                game.setScreen(new Mapa(game));
+                if (game.idJugador < 0) {
+                    game.setScreen(new PantallaGuardarNombre(game));
+                } else {
+                    game.setScreen(new Mapa(game));
+                }
                 dispose();
             }
         });
@@ -81,6 +84,8 @@ public class MainMenuScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(logoSaldoCero, (viewport.getWorldWidth() - 128 ) / 2f, viewport.getWorldHeight() - 150, 128, 128);
+        game.font.setColor(Color.WHITE);
+        game.font.draw(game.batch, game.getTextoVolumen(), 10, 20);
         game.batch.end();
 
         stage.act(delta);
@@ -105,6 +110,5 @@ public class MainMenuScreen implements Screen {
         startMenu.dispose();
         exitMenu.dispose();
         stage.dispose();
-        game.gestorMusica.dispose();
     }
 }

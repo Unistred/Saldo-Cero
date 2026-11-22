@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class ControladorEntrada {
     private final Vector2 direccion = new Vector2();
+
     public Vector2 getDireccionMovimiento() {
         float dx = 0;
         float dy = 0;
@@ -17,21 +18,47 @@ public class ControladorEntrada {
         if (!direccion.isZero()) direccion.nor();
         return direccion;
     }
+
     public boolean quiereInteractuar() {
         return Gdx.input.isKeyJustPressed(Input.Keys.E);
     }
+
     public boolean quiereGirarRodillosSlot() {
         return Gdx.input.isKeyJustPressed(Input.Keys.SPACE);
     }
+
     public boolean quiereVolver() {
         return Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE);
     }
+
+    // avanzar pagina de dialogo / continuar en pantallas de texto.
+    public boolean quiereAvanzar() {
+        return quiereGirarRodillosSlot()
+                || Gdx.input.isKeyJustPressed(Input.Keys.ENTER)
+                || Gdx.input.isKeyJustPressed(Input.Keys.E);
+    }
+
+    // terminar el nivel antes de tiempo (salida anticipada).
+    public boolean quiereSalirDelNivel() {
+        return Gdx.input.isKeyJustPressed(Input.Keys.X);
+    }
+
+    public boolean quiereSubirApuesta() {
+        return Gdx.input.isKeyJustPressed(Input.Keys.UP) || Gdx.input.isKeyJustPressed(Input.Keys.W);
+    }
+
+    public boolean quiereBajarApuesta() {
+        return Gdx.input.isKeyJustPressed(Input.Keys.DOWN) || Gdx.input.isKeyJustPressed(Input.Keys.S);
+    }
+
     public boolean quiereSubirVolumen() {
         return Gdx.input.isKeyJustPressed(Input.Keys.PLUS);
     }
+
     public boolean quiereBajarVolumen() {
         return Gdx.input.isKeyJustPressed(Input.Keys.MINUS);
     }
+
     public boolean quiereSilenciar() {
         return Gdx.input.isKeyJustPressed(Input.Keys.N);
     }

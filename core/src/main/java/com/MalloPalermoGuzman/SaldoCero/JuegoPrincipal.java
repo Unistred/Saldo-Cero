@@ -4,6 +4,8 @@ import com.MalloPalermoGuzman.SaldoCero.controles.ControladorEntrada;
 import com.MalloPalermoGuzman.SaldoCero.entidades.Jugador;
 import com.MalloPalermoGuzman.SaldoCero.gestores.GestorMusica;
 import com.MalloPalermoGuzman.SaldoCero.gestores.GestorSonido;
+import com.MalloPalermoGuzman.SaldoCero.configNiveles.ConfiguracionJuego;
+import com.MalloPalermoGuzman.SaldoCero.configNiveles.Partida;
 import com.MalloPalermoGuzman.SaldoCero.screens.MainMenuScreen;
 import com.MalloPalermoGuzman.SaldoCero.screens.PantallaGuardarNombre;
 import com.badlogic.gdx.Game;
@@ -12,11 +14,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.audio.Music;
 
 public class JuegoPrincipal extends Game {
     public static final float VIRTUAL_WIDTH = 800;
     public static final float VIRTUAL_HEIGHT = 400;
+
     public SpriteBatch batch;
     public BitmapFont font;
     public ControladorEntrada controladorEntrada;
@@ -25,6 +27,10 @@ public class JuegoPrincipal extends Game {
     public Jugador jugador;
     public String nombreJugador = "";
     public int idJugador = -1;
+
+    public ConfiguracionJuego configuracion;
+    public Partida partida;
+
     public static Texture cargarTextura(String ruta) {
         Texture texture = new Texture(Gdx.files.internal(ruta), true);
         texture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Nearest);
@@ -40,7 +46,16 @@ public class JuegoPrincipal extends Game {
         gestorMusica = new GestorMusica();
         gestorSonido = new GestorSonido();
         gestorSonido.cargarSonidos();
+
+        configuracion = ConfiguracionJuego.crear();
+        partida = new Partida(configuracion);
+
         setScreen(new MainMenuScreen(this));
+    }
+
+    // se llama al empezar una partida nueva desde el menu: saldo, nivel y tiempo vuelven a cero.
+    public void nuevaPartida() {
+        partida.reiniciar();
     }
 
     @Override
@@ -48,8 +63,8 @@ public class JuegoPrincipal extends Game {
         procesarControlesVolumen();
         super.render();
     }
+
     private void procesarControlesVolumen() {
-        // En la pantalla de nombre se escribe texto: la N, el - y el + no deben tocar el volumen.
         if (getScreen() instanceof PantallaGuardarNombre) return;
         if (controladorEntrada.quiereSubirVolumen()) {
             gestorMusica.subirVolumen();
@@ -65,7 +80,6 @@ public class JuegoPrincipal extends Game {
         }
     }
 
-    /** Texto para el HUD: "Vol: 50%" o "MUTE". */
     public String getTextoVolumen() {
         if (gestorMusica.isSilenciado()) return "MUTE";
         return "Vol: " + Math.round(gestorMusica.getVolumen() * 100) + "%";
@@ -73,7 +87,6 @@ public class JuegoPrincipal extends Game {
 
     @Override
     public void dispose() {
-        // Game.dispose() no libera la pantalla actual; si se cierra la ventana estando en ella, se libera aca.
         Screen pantallaActual = getScreen();
         if (pantallaActual != null) {
             pantallaActual.hide();
