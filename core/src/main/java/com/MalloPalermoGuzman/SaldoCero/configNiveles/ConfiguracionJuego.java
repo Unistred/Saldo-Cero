@@ -14,12 +14,14 @@ public class ConfiguracionJuego {
     private final ArrayList<ConfigNivel> niveles;
     private final String[] dialogoFinal;
     private final String fraseFinal;
+    private final String textoSinMeta;
 
-    private ConfiguracionJuego(int saldoInicial, ArrayList<ConfigNivel> niveles, String[] dialogoFinal, String fraseFinal) {
+    private ConfiguracionJuego(int saldoInicial, ArrayList<ConfigNivel> niveles, String[] dialogoFinal, String fraseFinal, String textoSinMeta) {
         this.saldoInicial = saldoInicial;
         this.niveles = niveles;
         this.dialogoFinal = dialogoFinal;
         this.fraseFinal = fraseFinal;
+        this.textoSinMeta = textoSinMeta;
     }
 
     /** Arma la configuracion completa del juego (3 niveles + dialogo final). */
@@ -30,7 +32,7 @@ public class ConfiguracionJuego {
         //nivel 1: viernes
         niveles.add(new ConfigNivel(
                 "Viernes - Introduccion",
-                120f,100, 2,15000,5,0.35f, apuestas,
+                180f,100, 2,15000,5,0.35f, apuestas,
                 paginas("Viernes - dialogoInicio",
                         "Viernes. En el colegio, tus amigos hablan de su juntada de ayer: fueron al casino y ganaron plata.",
                         "Te dicen que solo te cuentan como entrar si vas una vez. Que seguro nunca lo haces, que sos poco hombre.",
@@ -44,7 +46,7 @@ public class ConfiguracionJuego {
         //nivel 2: sabado
         niveles.add(new ConfigNivel(
                 "Sabado - Caida",
-                150f, 80, 3, 25000, 8, 0.60f,
+                180f, 80, 3, 25000, 8, 0.60f,
                 apuestas,
                 paginas("Sabado - dialogoInicio",
                         "Sabado. Tus amigos te esperan: hoy es el gran dia, a la noche vuelven al casino.",
@@ -72,7 +74,8 @@ public class ConfiguracionJuego {
 
         return new ConfiguracionJuego(
                 10000, niveles, dialogoFinal,
-                "Perdiste tu dinero, tu casa y tu familia. La casa siempre gana.");
+                "Perdiste tu dinero, tu casa y tu familia. La casa siempre gana.",
+                "No llegaste a tu meta. Te vas insatisfecho y con ganas de volver.");
     }
 
     /** Devuelve las paginas tal cual, avisando por consola si alguna supera el maximo recomendado. */
@@ -92,4 +95,5 @@ public class ConfiguracionJuego {
     public ConfigNivel getNivel(int indice) { return niveles.get(indice); }
     public String[] getDialogoFinal() { return dialogoFinal; }
     public String getFraseFinal() { return fraseFinal; }
+    public String getTextoSinMeta() { return textoSinMeta; }
 }

@@ -1,6 +1,8 @@
 package com.MalloPalermoGuzman.SaldoCero.screens;
 import com.MalloPalermoGuzman.SaldoCero.JuegoPrincipal;
 import com.MalloPalermoGuzman.SaldoCero.colisiones.ManejarColisiones;
+import com.MalloPalermoGuzman.SaldoCero.configNiveles.ConfigNivel;
+import com.MalloPalermoGuzman.SaldoCero.configNiveles.Partida;
 import com.MalloPalermoGuzman.SaldoCero.entidades.Obstaculo;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -31,6 +33,8 @@ import java.util.ArrayList;
 public class Mapa implements Screen {
     private static final int ID_SLOT = 4;
     private static final float ALCANCE = 12;
+    // si el tiempo se acaba mientras se juega a la tragamonedas, se espera a que termine la tirada y se deja este tiempo para ver el resultado
+    private static final float DEMORA_FIN_NIVEL = 1.5f;
     private static final float VISTA_ANCHO = 448;
     private static final float VISTA_ALTO = 384;
     private float limiteIzq, limiteDer, limiteAbajo, limiteArriba;
@@ -50,6 +54,9 @@ public class Mapa implements Screen {
     private boolean jugandoSlots = false;
     private String[] OPCIONES_PAUSA = {"Continuar", "Menu principal"};
     private boolean pausado = false;
+    private boolean confirmandoSalida = false;  // true mientras se pregunta si quiere terminar el dia antes de tiempo
+    private float demoraFin = 0f;
+    private Partida partida;
     private int opcionPausa = 0;
     private final GlyphLayout textoLayout = new GlyphLayout();
 
@@ -132,30 +139,58 @@ public class Mapa implements Screen {
         slots = new ArrayList<>();
         cargarParedes();
         if (juegoPrincipal.jugador == null) {
-            juegoPrincipal.jugador = new Jugador(512, 640, juegoPrincipal.nombreJugador);
+            juegoPrincipal.jugador = new Jugador(Jugador.INICIO_X, Jugador.INICIO_Y, juegoPrincipal.nombreJugador);
         }
         jugador = juegoPrincipal.jugador;
-        renderSlots = new RenderSlots(juegoPrincipal, jugador);
+        partida = juegoPrincipal.partida;
+        renderSlots = new RenderSlots(juegoPrincipal);
         jugandoSlots = false;
         pausado = false;
+        confirmandoSalida = false;
+        demoraFin = 0f;
         seguirJugador();
         camera.update();
     }
 
     @Override
     public void render(float delta) {
+        if (!pausado && !confirmandoSalida) {
+            partida.actualizarTiempo(Math.min(delta, 0.1f));
+        }
+        if (partida.tiempoAgotado()) {
+            if (jugandoSlots) {
+                if (!renderSlots.isGirando()) demoraFin += delta;
+                if (demoraFin >= DEMORA_FIN_NIVEL) {
+                    terminarNivel();
+                    return;
+                }
+            } else {
+                terminarNivel();
+                return;
+            }
+        }
         if (jugandoSlots) {
             renderizarSlots(delta);
             return;
         }
-        if (pausado) {
-            if (procesarPausa()) return; // true = se salio al menu principal
+        if (confirmandoSalida) {
+            if (juegoPrincipal.controladorEntrada.quiereConfirmar()) {
+                terminarNivel();
+                return;
+            }
+            if (juegoPrincipal.controladorEntrada.quiereVolver()) {
+                confirmandoSalida = false;
+            }
+        } else if (pausado) {
+            if (procesarPausa()) return;
         } else if (juegoPrincipal.controladorEntrada.quiereVolver()) {
             pausado = true;
             opcionPausa = 0;
+        } else if (juegoPrincipal.controladorEntrada.quiereSalirDelNivel()) {
+            confirmandoSalida = true;
         }
 
-        if (!pausado) {
+        if (!pausado && !confirmandoSalida) {
             jugador.update(delta, juegoPrincipal.controladorEntrada.getDireccionMovimiento());
             for(Rectangle pared : paredes){
                 if (Intersector.overlaps(jugador.getHitbox(), pared)){
@@ -172,7 +207,7 @@ public class Mapa implements Screen {
             }
         }
 
-        boolean cerca = !pausado && verificarCercaDeSlot();
+        boolean cerca = !pausado && !confirmandoSalida && verificarCercaDeSlot();
         if (cerca && juegoPrincipal.controladorEntrada.quiereInteractuar()) {
             jugandoSlots = true;
         }
@@ -187,6 +222,7 @@ public class Mapa implements Screen {
         jugador.render(juegoPrincipal.batch);
         dibujarHud(cerca);
         if (pausado) dibujarPausa();
+        if (confirmandoSalida) dibujarConfirmacion();
         juegoPrincipal.batch.end();
     }
 
@@ -212,8 +248,12 @@ public class Mapa implements Screen {
         return false;
     }
 
+    private void terminarNivel() {
+        juegoPrincipal.terminarNivel();
+        dispose();
+    }
+
     private void volverAlMenuPrincipal() {
-        // El jugador NO se libera aca: es de JuegoPrincipal y conserva saldo y cordura.
         juegoPrincipal.setScreen(new MainMenuScreen(juegoPrincipal));
         dispose();
     }
@@ -240,6 +280,28 @@ public class Mapa implements Screen {
         juegoPrincipal.font.setColor(Color.WHITE);
     }
 
+    private void dibujarConfirmacion() {
+        float ancho = viewport.getWorldWidth();
+        float alto = viewport.getWorldHeight();
+        float centroX = camera.position.x;
+        float centroY = camera.position.y;
+        ConfigNivel nivel = partida.getNivel();
+
+        juegoPrincipal.batch.draw(fondoHud, centroX - ancho / 2, centroY - alto / 2, ancho, alto);
+        juegoPrincipal.font.setColor(Color.WHITE);
+        escribirCentrado("Terminar el dia ahora?", centroX, centroY + 50);
+        if (partida.metaCumplida()) {
+            juegoPrincipal.font.setColor(Color.GREEN);
+            escribirCentrado("Llegaste a tu meta.", centroX, centroY + 20);
+        } else {
+            juegoPrincipal.font.setColor(Color.SALMON);
+            escribirCentrado("No llegaste a tu meta: perdes " + nivel.getPenalizacionCordura() + " de cordura.", centroX, centroY + 20);
+        }
+        juegoPrincipal.font.setColor(Color.GRAY);
+        escribirCentrado("ENTER: terminar el dia   ESC: seguir jugando", centroX, centroY - 20);
+        juegoPrincipal.font.setColor(Color.WHITE);
+    }
+
     private void escribirCentrado(String texto, float centroX, float y) {
         textoLayout.setText(juegoPrincipal.font, texto);
         juegoPrincipal.font.draw(juegoPrincipal.batch, textoLayout, centroX - textoLayout.width / 2, y);
@@ -252,28 +314,45 @@ public class Mapa implements Screen {
 
         juegoPrincipal.batch.draw(fondoHud, izq, arriba - 28, ancho, 28);
         juegoPrincipal.font.setColor(Color.WHITE);
-        juegoPrincipal.font.draw(juegoPrincipal.batch, "Saldo: $" + jugador.getSaldo(), izq + 12, arriba - 8);
-        juegoPrincipal.font.draw(juegoPrincipal.batch, "Cordura: " + jugador.getCordura(), izq + 150, arriba - 8);
+        juegoPrincipal.font.draw(juegoPrincipal.batch, "Saldo: $" + partida.getSaldo(), izq + 12, arriba - 8);
+        juegoPrincipal.font.draw(juegoPrincipal.batch, "Cordura: " + partida.getCorduraRedondeada(), izq + 150, arriba - 8);
         juegoPrincipal.font.draw(juegoPrincipal.batch, juegoPrincipal.getTextoVolumen(), izq + 260, arriba - 8);
         juegoPrincipal.font.draw(juegoPrincipal.batch, "ESC: Pausa", izq + ancho - 80, arriba - 8);
 
+        ConfigNivel nivel = partida.getNivel();
+        juegoPrincipal.batch.draw(fondoHud, izq, arriba - 56, ancho, 28);
+        juegoPrincipal.font.draw(juegoPrincipal.batch, nivel.getNombre(), izq + 12, arriba - 36);
+        juegoPrincipal.font.draw(juegoPrincipal.batch, "Tiempo " + partida.getTiempoRestanteTexto(), izq + 175, arriba - 36);
+        juegoPrincipal.font.draw(juegoPrincipal.batch, "Total " + partida.getTiempoTotalTexto(), izq + 275, arriba - 36);
+
+        juegoPrincipal.batch.draw(fondoHud, izq, abajo, ancho, 28);
+        juegoPrincipal.font.draw(juegoPrincipal.batch, "Meta: $" + nivel.getMetaSaldo(), izq + 12, abajo + 20);
         if (cerca) {
-            juegoPrincipal.batch.draw(fondoHud, izq, abajo, ancho, 28);
             juegoPrincipal.font.draw(juegoPrincipal.batch, "Presiona E para jugar", izq + ancho / 2 - 60, abajo + 20);
         }
+        juegoPrincipal.font.draw(juegoPrincipal.batch, "X: terminar dia", izq + ancho - 110, abajo + 20);
     }
 
     private void renderizarSlots(float delta) {
+        boolean quiereVolver = juegoPrincipal.controladorEntrada.quiereVolver();
         viewportSlots.apply();
         juegoPrincipal.batch.setProjectionMatrix(cameraSlots.combined);
-        renderSlots.render(delta);
+        renderSlots.render(delta, !partida.tiempoAgotado());
         juegoPrincipal.batch.begin();
         juegoPrincipal.font.setColor(Color.WHITE);
-        juegoPrincipal.font.draw(juegoPrincipal.batch, "ESC para volver al mapa", 220, 60);
+        String textoSalida = renderSlots.isGirando()
+                ? "ESC: termina el giro para volver al mapa"
+                : "ESC para volver al mapa";
+        juegoPrincipal.font.draw(juegoPrincipal.batch, textoSalida, 220, 60);
         juegoPrincipal.font.draw(juegoPrincipal.batch, juegoPrincipal.getTextoVolumen(), 500, 60);
         juegoPrincipal.batch.end();
-        if (juegoPrincipal.controladorEntrada.quiereVolver()) {
-            jugandoSlots = false;
+        if (quiereVolver) {
+            if (renderSlots.isGirando()) {
+                // No se puede abandonar la tragamonedas con una tirada en curso: se perderia el resultado.
+                renderSlots.avisarSalidaBloqueada();
+            } else {
+                jugandoSlots = false;
+            }
         }
     }
 

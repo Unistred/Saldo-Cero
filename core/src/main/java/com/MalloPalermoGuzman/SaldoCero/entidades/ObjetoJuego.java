@@ -23,6 +23,15 @@ public abstract class ObjetoJuego {
     public Texture getTextura(){
         return textura;
     }
+
+    /** Cambia la textura libera la anterior; la usan las entidades que degradan su sprite. */
+    protected void cambiarTextura(String rutaTextura) {
+        if (textura != null) {
+            textura.dispose();
+            textura = null;
+        }
+        this.textura = rutaTextura != null ? new Texture(rutaTextura) : null;
+    }
     public void dispose() {
         if (textura != null) textura.dispose();
     }

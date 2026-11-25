@@ -9,7 +9,6 @@ texturas/juegos/slots/siete.png
 texturas/juegos/slots/slot.png
 texturas/mapa/Bloques.tsx
 texturas/mapa/Sprite-0001.png
-texturas/mapa/casino saldo ceri.tmx
 texturas/mapa/casino_saldo_cero.tmx
 texturas/menu/exitMenu.png
 texturas/menu/logoMenuSaldoCero.png
@@ -17,3 +16,5 @@ texturas/menu/startMenu.png
 texturas/personajes/guardias/guardia2.png
 texturas/personajes/guardias/guerdia1.png
 texturas/personajes/jugador/jugadorAnimacionWASD.png
+texturas/personajes/jugador/jugadorAnimacionWASD_cansado.png
+texturas/personajes/jugador/jugadorAnimacionWASD_muy_cansado.png

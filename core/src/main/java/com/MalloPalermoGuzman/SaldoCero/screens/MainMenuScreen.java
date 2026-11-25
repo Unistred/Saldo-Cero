@@ -8,8 +8,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -25,7 +28,9 @@ public class MainMenuScreen implements Screen {
     private Texture exitMenu;
 
     private ImageButton botonStart;
+    private ImageButton botonLogros;
     private ImageButton botonExit;
+    private Label etiquetaLogros;
 
     public MainMenuScreen(JuegoPrincipal game) {
         this.game = game;
@@ -44,16 +49,28 @@ public class MainMenuScreen implements Screen {
         exitMenu      = JuegoPrincipal.cargarTextura("texturas/menu/exitMenu.png");
         TextureRegion regionStart = new TextureRegion(startMenu, 0, 0, 64, 64);
         TextureRegion regionExit = new TextureRegion(exitMenu, 0, 0, 64, 64);
-        botonStart = new ImageButton(new TextureRegionDrawable(new TextureRegion(regionStart)));
-        botonExit  = new ImageButton(new TextureRegionDrawable(new TextureRegion(regionExit)));
+        botonStart = new ImageButton(new TextureRegionDrawable(regionStart));
+        // No hay logrosMenu.png: se reutiliza el sprite de startMenu con una etiqueta "LOGROS".
+        botonLogros = new ImageButton(new TextureRegionDrawable(regionStart));
+        botonExit  = new ImageButton(new TextureRegionDrawable(regionExit));
 
         botonStart.setSize(64, 64);
+        botonLogros.setSize(64, 64);
         botonExit.setSize(64, 64);
 
         botonStart.setPosition(viewport.getWorldWidth() / 2f - botonStart.getWidth() / 2f, viewport.getWorldHeight() / 2f);
+        botonLogros.setPosition(viewport.getWorldWidth() / 2f - botonLogros.getWidth() / 2f, viewport.getWorldHeight() / 2f - 50);
         botonExit.setPosition(viewport.getWorldWidth() / 2f - botonExit.getWidth() / 2f, viewport.getWorldHeight() / 2f - 100);
 
+        etiquetaLogros = new Label("LOGROS", new Label.LabelStyle(game.font, Color.WHITE));
+        etiquetaLogros.setSize(botonLogros.getWidth(), 20f);
+        etiquetaLogros.setPosition(botonLogros.getX(), botonLogros.getY() + 22f);
+        etiquetaLogros.setAlignment(Align.center);
+        etiquetaLogros.setTouchable(Touchable.disabled);
+
         stage.addActor(botonStart);
+        stage.addActor(botonLogros);
+        stage.addActor(etiquetaLogros);
         stage.addActor(botonExit);
 
         botonStart.addListener(new com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
@@ -63,8 +80,16 @@ public class MainMenuScreen implements Screen {
                 if (game.idJugador < 0) {
                     game.setScreen(new PantallaGuardarNombre(game));
                 } else {
-                    game.setScreen(new Mapa(game));
+                    game.nuevaPartida();
                 }
+                dispose();
+            }
+        });
+
+        botonLogros.addListener(new com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                game.setScreen(new PantallaLogros(game));
                 dispose();
             }
         });
@@ -111,4 +136,4 @@ public class MainMenuScreen implements Screen {
         exitMenu.dispose();
         stage.dispose();
     }
-}
+}

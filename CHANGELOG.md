@@ -84,3 +84,36 @@ Mejoras visuales y renderizado de slots
 ## Modificado 
 - JuegoPrincipal: se crean configuracion y partida en create() y se agrega nuevaPartida() para reiniciar al empezar desde el menu.
 - ControladorEntrada: nuevos metodos quiereAvanzar(), quiereSalirDelNivel().
+
+## [1.0.0] - 24-11-2026
+
+### Añadido
+- Degradacion visual del jugador por dia: nuevos spritesheets jugadorAnimacionWASD_cansado.png y jugadorAnimacionWASD_muy_cansado.png, seleccion automatica segun el nivel en Jugador.actualizarDia(int) y liberacion de la textura anterior en ObjetoJuego.cambiarTextura(String).
+- Sistema de deuda acumulativa por dia (+5000 por cierre de jornada), acreditada al saldo disponible del jugador y protegida contra duplicados con deudaAplicada.
+- Logros internos: enum Logro (Primera deuda, Saldo cero), marcado desde Partida y persistido en SQLite sin duplicados.
+- Menu de Logros: boton en MainMenuScreen (reutiliza startMenu.png con etiqueta "LOGROS") y PantallaLogros con desbloqueados, historial acumulado y resumen de apuestas leidos con SELECT.
+- Base de datos: inicializacion al arrancar, DDL sentencia por sentencia, migracion automatica de deuda_final, consolidacion de jornadas por jugador/dia, registro de apuestas y tabla Historial_Logros con un evento por partida.
+- Pantallas de flujo: PantallaDialogo (dialogos paginados de inicio y cierre por nivel) y PantallaFinal (frase final y tiempo total de la partida).
+- Volumen del efecto del slot en tiempo real: GestorSonido guarda el id de reproduccion y aplica setVolume al sonido en curso; el mute y los proximos giros respetan el nivel configurado.
+- Flujo completo de partida en JuegoPrincipal: dialogo de inicio por nivel, cierre con registro de jornada en BD (EXITOSA/FALLIDA y deuda final), dialogo final y PantallaFinal. Guardar el nombre reinicia la partida desde el primer nivel.
+- Confirmacion para terminar el dia antes de tiempo: X abre el aviso, ENTER confirma y ESC sigue jugando. Si se acaba el tiempo durante un giro, se espera 1,5 s a que termine la tirada antes de cerrar el nivel.
+- Tragamonedas parametrizada por nivel: apuestas y probabilidad de perder leidas de ConfigNivel, ajuste automatico de la apuesta al saldo disponible y seguimiento de la ultima apuesta/premio para la BD.
+- ConfiguracionJuego: duracion de los niveles 1 y 2 ajustada a 180 s y nuevo texto de aviso cuando no se alcanza la meta.
+- ControladorEntrada: nuevo quiereConfirmar() (ENTER/ESPACIO) y teclas alternativas para subir/bajar volumen (=, ], /).
+
+### Modificado
+- Deuda a 5000 por dia; se conserva el credito al saldo y el logro Primera deuda.
+- HUD: se quito el indicador separado de deuda en Mapa y RenderSlots, conservando saldo, cordura, volumen, meta y tiempos.
+- RenderSlots y Mapa: la apuesta se registra al terminar el giro; ESC queda bloqueado mientras los rodillos giran y se muestra un aviso.
+- PantallaFinal: guardia primerFrame para no consumir el ENTER que cerro el ultimo dialogo.
+- ConfigNivel: el comentario ahora indica que los datos estan definidos en ConfiguracionJuego.crear() y no en un JSON.
+- PantallaGuardarNombre: se limpia el procesador de entrada antes de iniciar la partida para no volver a disparar guardar(), y ahora arranca con nuevaPartida() en vez de entrar directo al mapa.
+- assets.txt: incluye los dos sprites nuevos y deja fuera el mapa obsoleto casino saldo ceri.tmx, que tambien se elimino del proyecto.
+
+### Arreglo de bugs
+- El premio de la tragamonedas nunca se guardaba en la BD: se registraba la apuesta al iniciar el giro con ganado 0 y la bandera se limpiaba antes del resultado. Ahora se guarda al finalizar con el monto real y se usa apuestaGirada para calcular el premio.
+- La pantalla final podia saltarse sola por el ENTER pendiente del dialogo anterior.
+- Se podia volver al mapa a mitad de un giro, descartando el resultado de la apuesta.
+- El historial de logros mostraba siempre x1 por el indice UNIQUE; ahora los eventos por partida permiten acumular veces.
+- GestorBD ya no asume conexion disponible: todas las operaciones omiten la accion y avisan por consola si falla la conexion.
+- El volumen y el silencio del efecto de giro ahora afectan al sonido que esta sonando y al siguiente.

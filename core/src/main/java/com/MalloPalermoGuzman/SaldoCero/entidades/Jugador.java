@@ -8,9 +8,19 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Jugador extends ObjetoJuego {
+    // punto donde aparece el jugador al empezar cada nivel
+    public static final float INICIO_X = 512;
+    public static final float INICIO_Y = 640;
+
+    /** Un sprite por dia de la partida (filas 0/1/2: derecha, abajo/S, arriba/W). */
+    private static final String[] SPRITES_POR_DIA = {
+        "texturas/personajes/jugador/jugadorAnimacionWASD.png",
+        "texturas/personajes/jugador/jugadorAnimacionWASD_cansado.png",
+        "texturas/personajes/jugador/jugadorAnimacionWASD_muy_cansado.png"
+    };
+
     private String nombre;
-    private int saldo = 500;
-    private int cordura = 100;
+    private String rutaTexturaActual;
     private float x, y;
     private int velocidad = 150;
     private float anteriorX, anteriorY;
@@ -18,10 +28,29 @@ public class Jugador extends ObjetoJuego {
     private Direccion mirando = Direccion.ABAJO;
     private float tiempoAnimacion = 0f;
     public Jugador(float x, float y, String nombre) {
-        super("texturas/personajes/jugador/jugadorAnimacionWASD.png", x, y, 25, 28);
+        this(x, y, nombre, 1);
+    }
+
+    public Jugador(float x, float y, String nombre, int numeroDia) {
+        super(rutaParaDia(numeroDia), x, y, 25, 28);
+        this.rutaTexturaActual = rutaParaDia(numeroDia);
         this.x = x;
         this.y = y;
         this.nombre = nombre;
+        cargarAnimaciones();
+    }
+
+    private static String rutaParaDia(int numeroDia) {
+        int dia = Math.max(1, Math.min(SPRITES_POR_DIA.length, numeroDia));
+        return SPRITES_POR_DIA[dia - 1];
+    }
+
+    /** Degrada la apariencia segun el dia: 1 normal, 2 cansado, 3 muy cansado. */
+    public void actualizarDia(int numeroDia) {
+        String ruta = rutaParaDia(numeroDia);
+        if (ruta.equals(rutaTexturaActual)) return;
+        cambiarTextura(ruta);
+        rutaTexturaActual = ruta;
         cargarAnimaciones();
     }
     public void deshacerMovimiento(){
@@ -87,19 +116,14 @@ public class Jugador extends ObjetoJuego {
         Rectangle hb = getHitbox();
         batch.draw(cuadroActual(), hb.x, hb.y, hb.width, hb.height);
     }
-    public int getSaldo() {
-        return saldo;
+    // pone al jugador en una posicion (por ejemplo al empezar un nivel) y lo deja mirando hacia abajo
+    public void colocarEn(float nuevoX, float nuevoY){
+        this.x = nuevoX;
+        this.y = nuevoY;
+        this.anteriorX = nuevoX;
+        this.anteriorY = nuevoY;
+        this.mirando = Direccion.ABAJO;
+        this.tiempoAnimacion = 0f;
+        getHitbox().setPosition(this.x, this.y);
     }
-    public int getCordura() {
-        return cordura;
-    }
-    public int descontarSaldo(int descontado){
-        return saldo - descontado;
-    }
-    public void setSaldo(int num){
-        this.saldo = num;
-    }
-    public void descontarCordura(int descontado){
-        this.cordura -= descontado;
-    }
-}
+}

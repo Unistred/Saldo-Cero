@@ -38,6 +38,11 @@ public class ControladorEntrada {
                 || Gdx.input.isKeyJustPressed(Input.Keys.E);
     }
 
+    // confirmar una pregunta (por ejemplo terminar el dia). No incluye la E para no confirmar sin querer.
+    public boolean quiereConfirmar() {
+        return Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.SPACE);
+    }
+
     // terminar el nivel antes de tiempo (salida anticipada).
     public boolean quiereSalirDelNivel() {
         return Gdx.input.isKeyJustPressed(Input.Keys.X);
@@ -52,11 +57,14 @@ public class ControladorEntrada {
     }
 
     public boolean quiereSubirVolumen() {
-        return Gdx.input.isKeyJustPressed(Input.Keys.PLUS);
+        return Gdx.input.isKeyJustPressed(Input.Keys.PLUS)
+                || Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)
+                || Gdx.input.isKeyJustPressed(Input.Keys.RIGHT_BRACKET);
     }
 
     public boolean quiereBajarVolumen() {
-        return Gdx.input.isKeyJustPressed(Input.Keys.MINUS);
+        return Gdx.input.isKeyJustPressed(Input.Keys.MINUS)
+                || Gdx.input.isKeyJustPressed(Input.Keys.SLASH);
     }
 
     public boolean quiereSilenciar() {

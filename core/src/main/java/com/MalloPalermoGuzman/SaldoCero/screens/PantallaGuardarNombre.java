@@ -79,12 +79,13 @@ public class PantallaGuardarNombre implements Screen {
         }
         game.nombreJugador = limpio;
         game.idJugador = id;
-        irAlMapa();
+        irAPartida();
     }
 
-    private void irAlMapa() {
+    private void irAPartida() {
+        // se saca este procesador: si quedara activo, ENTER en las pantallas siguientes volveria a llamar a guardar()
         Gdx.input.setInputProcessor(null);
-        game.setScreen(new Mapa(game));
+        game.nuevaPartida();
         dispose();
     }
 
@@ -128,4 +129,4 @@ public class PantallaGuardarNombre implements Screen {
     @Override public void resume() {}
     @Override public void hide() {}
     @Override public void dispose() {}
-}
+}

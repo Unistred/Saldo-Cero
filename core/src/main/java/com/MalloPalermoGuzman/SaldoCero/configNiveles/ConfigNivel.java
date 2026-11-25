@@ -1,6 +1,6 @@
 package com.MalloPalermoGuzman.SaldoCero.configNiveles;
 
-/** Datos de un nivel (viernes, sabado o domingo), leidos de assets/datos/niveles.json. */
+/** Datos de un nivel (viernes, sabado o domingo), definidos en ConfiguracionJuego.crear(). */
 public class ConfigNivel {
     private final String nombre;
     private final float tiempoSegundos;
